@@ -1,0 +1,2706 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Inpro IoT Platform API",
+    "description": "Inpro IoT Platform API",
+    "contact": {
+      "email": "cbou@zat.net"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/v1/devices": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "ListDevices",
+        "description": "Devuelve un listado con todos los dispositivos.",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Cantidad de registros a devolver",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "desplazamiento de registros",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "modelo del dispositivo",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "description": "Proveedor del dispositivo",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "estado del dispositivo",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de dispositivos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "uuid": "14caaa6c-ac23-45de-8393-1fbf00c4d719",
+                      "equipment_identity": 357911041234567,
+                      "provider": "tekelek",
+                      "model": 822
+                    },
+                    {
+                      "uuid": "1af09169-0b91-48d9-ac54-cb3b3e5d98e5",
+                      "equipment_identity": "22:1c:25:5e:65:9b",
+                      "provider": "tekelek",
+                      "model": 750
+                    },
+                    {
+                      "uuid": "a8862ac5-5161-42c3-9e39-a631535a1fb4",
+                      "equipment_identity": "9b:4e:d9:5f:81:b5",
+                      "provider": "inpro",
+                      "model": "GW-R1"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "UpdateDevice",
+        "description": "Actualiza un dispositivo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "uuuid": "14caaa6c-ac23-45de-8393-1fbf00c4d719",
+                  "equipment_identity": 357911041234567,
+                  "model_id": 0,
+                  "status_id": 0,
+                  "sim_id": 0
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "El dispositivo no exite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Not Found"
+                  },
+                  {
+                    "message": "El dispositivo \"uuid\" no exite"
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Invalid Payload"
+                  },
+                  {
+                    "message": "Falta el campo \"uuuid\""
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "CreateDevice",
+        "description": "Crear un nuevo dispositivo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "equipment_identity": 357911041234567,
+                  "model_id": 0,
+                  "status_id": 0,
+                  "sim_id": 0
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Devuelve el UUID del nuevo dipositivo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                },
+                "example": [
+                  {
+                    "uuid": "14caaa6c-ac23-45de-8393-1fbf00c4d719"
+                  }
+                ]
+              }
+            }
+          },
+          "409": {
+            "description": "El dispositivo ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Conflict"
+                  },
+                  {
+                    "message": "Ya existe un dispositivo con el \"equipment_identity\" XXX"
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Invalid Payload"
+                  },
+                  {
+                    "message": "Falta el campo \"equipment_identity\""
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/csv/upload": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "UploadCSVDevices",
+        "description": "Carga masiva de dispositivos mediante un CSV",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/csv_upload_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Subido correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "formato incorrecto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Invalid Payload"
+                    },
+                    {
+                      "message": "El fomato del CSV no es correcto"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "GetDevice",
+        "description": "Muestra los datos de un device.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_3"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/properties": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "ListDeviceProperties.",
+        "description": "Lista las propiedadews de un dispositivo.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Devuelve todos los nombres de las propiedades del dispositivo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "name": "tanque",
+                      "id": 12
+                    },
+                    {
+                      "name": "ubicacion",
+                      "id": 13
+                    },
+                    {
+                      "name": "owner",
+                      "id": 64
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "CreateDeviceProperty",
+        "description": "Crear una nueva propiedad del dispositivo",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "property": "propiedad_1",
+                  "data": {
+                    "campo": "valor1",
+                    "campo2": "valor2"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "id": 64
+                  }
+                ]
+              }
+            }
+          },
+          "409": {
+            "description": "La propiedad ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Conflict"
+                    },
+                    {
+                      "message": "La propiedad \"propiedad_1\" ya existe"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/commands": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "CreateScheduledDeviceCommand",
+        "description": "Progama la ejecución de un comando en un dispositivo",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "command_id": 12,
+                  "timestamp_sch": 1669056000000,
+                  "comments": "Lorem ipsum dolor sit amet"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_5"
+                },
+                "example": [
+                  {
+                    "id": 12
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "INvalid Payload"
+                    },
+                    {
+                      "message": "La fecha no puede ser inferior a la actual"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/commands/{command}": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "UpdateScheduledDeviceCommand",
+        "description": "Actualiza la programación de un comando en un dispositivo.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "description": "Id de la programación de comandos a actualizar.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "command_id": 12,
+                  "timestamp_sch": 1669058000000,
+                  "comments": "Otro Lorem ipsum dolor sit amet"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La programación no exite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "No hay comando programado con el id {command}"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Invalid Payload"
+                    },
+                    {
+                      "message": "No exite el comando {command} en el sistema"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "DeeteScheduledDeviceCommand",
+        "description": "Borra la programación de un comando en un dispositivo",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "description": "Id de la programación de comandos a actualizar.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La programación no exite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "No hay comando programado con el id {command}"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/properties/{property}": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "GetDeviceProperty",
+        "description": "Muestra la información de la propiedad",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "property",
+            "in": "path",
+            "description": "Id de la propiedad",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "UpdateDeviceProperty",
+        "description": "Actualiza una nueva propiedad del dispositivo",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "property",
+            "in": "path",
+            "description": "Id de la propiedad",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "property": "propiedad_1",
+                  "data": {
+                    "alto": 100,
+                    "Ancho": 200,
+                    "volumen_maximo": 9000,
+                    "orientacion": "vertical"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La propiedad no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "La propiedad \"propiedad_1\" no exite"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "DeletDeviceProperty",
+        "description": "Borra una propiedad de un dispositivo",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "property",
+            "in": "path",
+            "description": "Id de la propiedad",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La propiedad no exite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "No una propiedad {property} para el dispositivo {uuid}"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/data": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "GetDeviceData",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID del dispositivo.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Cantidad de registros a devolver",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "desplazamiento de registros",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "description": "nombre del campo que queremos recuperar",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Muestra las mediciones realizadas por el dispositivo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Objeto JSON con las lecturas."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/status": {
+      "put": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "UpdateDeviceStatus",
+        "description": "Actualiza El estado de un dispositivo.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/uuid_status_body"
+              },
+              "example": [
+                {
+                  "status": 5
+                }
+              ]
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado correcto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "No exite el dispositivo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "Device not found"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Invalid Payload"
+                    },
+                    {
+                      "message": "No exite el estado en el sistema"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/config": {
+      "get": {
+        "tags": [
+          "Devices"
+        ],
+        "summary": "ListDeviceConfig.",
+        "description": "Lista las configuraciones de un dispositivo.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Cantidad de registros para mostrar",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "desplazamiento de registros",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "start_dt",
+            "in": "query",
+            "description": "timestamp de inicio",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_dt",
+            "in": "query",
+            "description": "timestamp de fin",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Devuelve todas las configuraciones del dispositivo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_7"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/alarms/settings": {
+      "get": {
+        "tags": [
+          "Alarms"
+        ],
+        "summary": "ListDeviceAlarmsSettings",
+        "description": "Lista la configuración de las alarmas de un dispositivo.",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Devuelve listado de configuraciones de alarmas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_8"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Alarms"
+        ],
+        "summary": "CreateDeviceAlarmConfig",
+        "description": "Crear una configuración de alarma",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "alarm_1",
+                  "config": {
+                    "enabled": true,
+                    "threshold": "9000",
+                    "condition": ">",
+                    "key": "temp"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_9"
+                },
+                "example": [
+                  {
+                    "id": 12
+                  }
+                ]
+              }
+            }
+          },
+          "409": {
+            "description": "La alarma ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Conflict"
+                    },
+                    {
+                      "message": "La alarma \"name\" ya existe"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{uuid}/alarms/{alarm}/settings": {
+      "put": {
+        "tags": [
+          "Alarms"
+        ],
+        "summary": "UpdateDeviceAlarmConfig",
+        "description": "Actualiza la configuración de una alarma",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "alarm",
+            "in": "path",
+            "description": "alarm id.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "alarm_1",
+                  "config": {
+                    "enabled": true,
+                    "threshold": "9000",
+                    "condition": ">",
+                    "key": "temp"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La alarma no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "La alarma \"alamra_1\" no exite"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Alarms"
+        ],
+        "summary": "DeleteDeviceAlarmConfig",
+        "description": "Borra la configuración de una alarma",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "UUID of the device to retrieve data for.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "alarm",
+            "in": "path",
+            "description": "alarm id.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "La alarma no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "La alarma no existe"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sims/": {
+      "get": {
+        "tags": [
+          "SIMS"
+        ],
+        "summary": "ListSims",
+        "description": "Retorna un listado de las SIMS",
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_10"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sims/{iccid}": {
+      "get": {
+        "tags": [
+          "SIMS"
+        ],
+        "summary": "GetSim",
+        "description": "Retorna los datos de una SIM identificada por el ICCID",
+        "parameters": [
+          {
+            "name": "iccid",
+            "in": "path",
+            "description": "SIM ICCID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_11"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sims/{iccid}/usage": {
+      "get": {
+        "tags": [
+          "SIMS"
+        ],
+        "summary": "GetSimUsage",
+        "description": "Retorna los datos de uso de la SIM por un periodo de tiempo",
+        "parameters": [
+          {
+            "name": "iccid",
+            "in": "path",
+            "description": "SIM ICCID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_dt",
+            "in": "query",
+            "description": "timestamp de inicio",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_dt",
+            "in": "query",
+            "description": "timestamp de fin",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "timestamp": 1669056000000,
+                      "sms_balance": 250,
+                      "data_balance": 5120
+                    },
+                    {
+                      "timestamp": 1668969600000,
+                      "sms_balance": 249,
+                      "data_balance": 5020
+                    },
+                    {
+                      "timestamp": 1668883200000,
+                      "sms_balance": 247,
+                      "data_balance": 4098
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_12"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/v1/alarms": {
+      "get": {
+        "tags": [
+          "Alarms"
+        ],
+        "summary": "ListAlarms",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "query",
+            "description": "UUID del dispositivo.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Cantidad de registros para mostrar",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "desplazamiento de registros",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "start_dt",
+            "in": "query",
+            "description": "timestamp de inicio",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_dt",
+            "in": "query",
+            "description": "timestamp de fin",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "description": "estado de la alarma",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Muestra el historico de alarmas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_13"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found."
+          }
+        }
+      }
+    },
+    "/v1/models/": {
+      "get": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "ListModels",
+        "description": "Retorna un listado de los modelos de dispositivos",
+        "responses": {
+          "200": {
+            "description": "Operación realizada con exito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_14"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "CreateModel",
+        "description": "Crear un nuevo modelo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "model one",
+                  "provider": "provider name",
+                  "firmware_version": "5.1",
+                  "hardware_version": "0.1",
+                  "payload_value": "Modl4",
+                  "active": true
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Devuelve el Id del nuevo modelo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_15"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El modelo ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Conflict"
+                  },
+                  {
+                    "message": "Ya existe un modelo con el \"model_name\" para el \"provider\" y el \"firmware_version\" / \"hardware_version\""
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Invalid Payload"
+                  },
+                  {
+                    "message": "Falta el campo \"XXXXXXX\""
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/models/{model}": {
+      "put": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "UpdateModel",
+        "description": "Actualiza un modelo",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Id del modelo",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "id": 1,
+                  "name": "model one",
+                  "active": true
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "El modelo no exite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Not Found"
+                  },
+                  {
+                    "message": "El modelo \"id\" no exite"
+                  }
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Datos incorrectos en el payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                },
+                "example": [
+                  {
+                    "error": "Invalid Payload"
+                  },
+                  {
+                    "message": "Falta el campo \"uuuid\""
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/models/{model}/commands": {
+      "get": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "ListModelCommands",
+        "description": "Lista los comandos de un modelo.",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Id del modelo",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Devuelve todos los commandos de un modelo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "name": "Rebot"
+                    },
+                    {
+                      "value": "Rbot=1"
+                    },
+                    {
+                      "descripcion": "Reinicia el dispositivo"
+                    },
+                    {
+                      "automatic": false
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_16"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "CreateModelCommand",
+        "description": "Crear una nueva  del dispositivo",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Id del modelo",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "nombre_comando",
+                  "value": "Rbot=1",
+                  "automatic": false,
+                  "system_action_type_id": 1
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_17"
+                },
+                "example": [
+                  {
+                    "id": 12
+                  }
+                ]
+              }
+            }
+          },
+          "409": {
+            "description": "El comando ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Conflict"
+                    },
+                    {
+                      "message": "El comando \"value\" ya existe para este \"model\""
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/models/{model}/commands/{command}": {
+      "put": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "UpdateModelCommand",
+        "description": "Actualiza un comando",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Id del modelo",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "description": "Id del comando",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "nombre_comando",
+                  "value": "Rbot=1"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "El comando no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "El comando no existe"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Ya exite un comando con ese valor para el modelo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Conflict"
+                    },
+                    {
+                      "message": "El comando \"value\" ya existe para este \"model\" en el comando \"id\"/ \"name\""
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Models"
+        ],
+        "summary": "DeleteModelCommand",
+        "description": "Borra un comando",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Id del modelo",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "description": "Id del comando",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "example": [
+                  {
+                    "result": "ok"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "El comando no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "error": "Not Found"
+                    },
+                    {
+                      "message": "El comando no existe"
+                    }
+                  ],
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_404"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/commands": {
+      "get": {
+        "tags": [
+          "Commands"
+        ],
+        "summary": "ListCommands",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Cantidad de registros para mostrar",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "desplazamiento de registros",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "start_dt",
+            "in": "query",
+            "description": "timestamp de inicio",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_dt",
+            "in": "query",
+            "description": "timestamp de fin",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Muestra la cola de comandos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_18"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se han enocntrado comandos."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "v1devices_status": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del estado"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Id del estado"
+          }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "UUID of the device.",
+            "format": "uuid"
+          },
+          "equipment_identity": {
+            "type": "string",
+            "description": "internal device identifyer IMEI or MAC."
+          },
+          "provider": {
+            "type": "string",
+            "description": "Name of the device provider."
+          },
+          "model": {
+            "type": "string",
+            "description": "Model of the device."
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/v1devices_status"
+            }
+          }
+        }
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Resultado de la operación"
+          }
+        }
+      },
+      "inline_response_404": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Tipo de error."
+          },
+          "message": {
+            "description": "descripción detallada del error"
+          }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Resultado de la operación",
+            "format": "uuid"
+          }
+        }
+      },
+      "csv_upload_body": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": {
+          "equipment_identity": {
+            "type": "string",
+            "description": "Identificador interno del dispositivo.",
+            "example": "357911041234567"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Nombre del proveedor.",
+            "example": "tekelek"
+          },
+          "model": {
+            "type": "string",
+            "description": "Modelo.",
+            "example": "822"
+          },
+          "status": {
+            "type": "string",
+            "description": "Estado actual del device",
+            "example": "suspended"
+          },
+          "last_seen": {
+            "type": "integer",
+            "description": "Timestamp de la última conexión con la plataforma",
+            "format": "integer",
+            "example": 1687312224
+          },
+          "iccid": {
+            "type": "string",
+            "description": "ICCID de la sim si el device tiene una asociada",
+            "example": "8944503200000000001F"
+          }
+        }
+      },
+      "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre de la propiedad"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Id de la propiedad"
+          }
+        }
+      },
+      "inline_response_200_5": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Devuelve el id del comando en la cola"
+          }
+        }
+      },
+      "inline_response_200_6": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 64
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la propiedad",
+            "example": "Tanque"
+          },
+          "data": {
+            "type": "object",
+            "description": "Objeto JSON con los datos de la property",
+            "example": {
+              "alto": 100,
+              "Ancho": 200,
+              "volumen_maximo": 9000,
+              "orientacion": "vertical"
+            }
+          }
+        }
+      },
+      "uuid_status_body": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Id del nuevo estado"
+          }
+        }
+      },
+      "inline_response_200_7": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 64
+          },
+          "date": {
+            "type": "integer",
+            "description": "Timestamp cuando se recibio la configuración",
+            "example": 1687312224
+          },
+          "config": {
+            "type": "object",
+            "description": "Objeto JSON con la configuración",
+            "example": {
+              "SURL": "192.168.100.100/UploadJSONData",
+              "PASS": "XXXXXXX",
+              "SPORT": "64"
+            }
+          }
+        }
+      },
+      "inline_response_200_8": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "nombre de la alarma."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "indica si la alarma esta activada."
+          },
+          "threshold": {
+            "type": "string",
+            "description": "valor del limite"
+          },
+          "condition": {
+            "type": "string",
+            "description": "indica el comportamieto del limite (< = > !=)."
+          },
+          "key": {
+            "type": "string",
+            "description": "Nombre del campo sobre el que se aplica el limite."
+          }
+        }
+      },
+      "inline_response_200_9": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "integer",
+            "description": "Id de la nueva alarma"
+          }
+        }
+      },
+      "inline_response_200_10": {
+        "type": "object",
+        "properties": {
+          "iccid": {
+            "type": "string",
+            "description": "ICCID de la SIM."
+          },
+          "provider": {
+            "type": "string",
+            "description": "Nombre del proveedor."
+          },
+          "status": {
+            "type": "string",
+            "description": "indica el estado."
+          },
+          "data_balance": {
+            "type": "number",
+            "description": "Volumen en MB disponibles."
+          },
+          "session_info": {
+            "type": "string",
+            "description": "última información del estado de la sesión de la SIM"
+          }
+        }
+      },
+      "inline_response_200_11": {
+        "type": "object",
+        "properties": {
+          "iccid": {
+            "type": "string",
+            "description": "ICCID de la SIM.",
+            "example": "8944503200000000001F"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Nombre del proveedor."
+          },
+          "status": {
+            "type": "string",
+            "description": "indica el estado."
+          },
+          "data_balance": {
+            "type": "number",
+            "description": "Volumen en MB disponibles."
+          },
+          "sms_balance": {
+            "type": "number",
+            "description": "Número de SMS disponibles."
+          },
+          "expiry_date": {
+            "type": "integer",
+            "description": "timestamp en la que la SIM dejará de estar activa."
+          }
+        }
+      },
+      "inline_response_200_12": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "description": "Timestamp",
+            "format": "integer"
+          },
+          "sms_balance": {
+            "type": "integer",
+            "description": "Número de SMS disponibles."
+          },
+          "data_balance": {
+            "type": "number",
+            "description": "Volumen de MB disponibles."
+          }
+        }
+      },
+      "inline_response_200_13": {
+        "type": "object",
+        "properties": {
+          "start_dt": {
+            "type": "integer",
+            "description": "Hora en la que se declara la alarma."
+          },
+          "end_dt": {
+            "type": "integer",
+            "description": "Hora en la que se restablecio la alarma."
+          },
+          "threshold": {
+            "type": "string",
+            "description": "valor del limite"
+          },
+          "condition": {
+            "type": "string",
+            "description": "indica el comportamieto del limite (< = > !=)."
+          },
+          "key": {
+            "type": "string",
+            "description": "Nombre del campo sobre el que se aplica el limite."
+          },
+          "value": {
+            "type": "string",
+            "description": "Valor del campo key en el momento en que se declaro la alarma"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Estado de la alarma"
+          },
+          "uuid": {
+            "type": "string",
+            "description": "uuid del dispositivo",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre unico de la alrmar del dispositivo"
+          }
+        }
+      },
+      "inline_response_200_14": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del modelo"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Nombre del proveedor"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Id en la base de datos"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indica si el modelo ha sido retirado"
+          }
+        }
+      },
+      "inline_response_200_15": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Id del modelo"
+          }
+        }
+      },
+      "inline_response_200_16": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre comando"
+          },
+          "value": {
+            "type": "string",
+            "description": "Comando"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descripción del comando"
+          },
+          "automatic": {
+            "type": "boolean",
+            "description": "Si el comando se ha de enviar automaricamente"
+          }
+        }
+      },
+      "inline_response_200_17": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Id del nuevo comando"
+          }
+        }
+      },
+      "inline_response_200_18": {
+        "type": "object",
+        "properties": {
+          "timestamp_sch": {
+            "type": "integer",
+            "description": "Timestamp en la que se ha programado la ejecución comando"
+          },
+          "temistamp_exe": {
+            "type": "integer",
+            "description": "Timestamp en la que se ha envidado el comando el dispositivo"
+          },
+          "command_id": {
+            "type": "integer",
+            "description": "Id del comando del modelo"
+          },
+          "result": {
+            "type": "string",
+            "description": "Resuldado de la ejecución del comando"
+          },
+          "uuid": {
+            "type": "string",
+            "description": "UUID del dispositivo al que se ha asignado el comando",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  }
+}
