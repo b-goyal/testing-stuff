@@ -1,3 +1,0 @@
-steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['run', '-i', 'grafana/k6', 'run', '-e', 'CASE=3', 'scripts/perf-url.js']
