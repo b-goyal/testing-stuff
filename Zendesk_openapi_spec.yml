@@ -22069,16 +22069,6 @@ components:
           description: An array of [change](#change) objects
           items:
             $ref: '#/components/schemas/TriggerChangeObject'
-      example:
-        field:
-          - change: =
-            content: status
-        operator:
-          - change: =
-            content: less_than
-        value:
-          - change: +
-            content: solved
     TriggerConditionObject:
       type: object
       properties:
